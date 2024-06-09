@@ -11,10 +11,24 @@ import (
 )
 
 func romeToInt(s string) int {
+
 	rtoi := map[string]int{"I": 1, "V": 5, "X": 10}
 	result := 0
+	repeatCounter := 1
 	for i := 0; i < len(s)-1; i++ {
 		current, next := rtoi[string(s[i])], rtoi[string(s[i+1])]
+		if current == next {
+			repeatCounter++
+			if repeatCounter > 3 {
+				panic("Неверный формат римского числа, в римском числе символы не могу повторятся больше трёх раз")
+			}
+		} else {
+			if repeatCounter > 1 && next > current {
+				panic("Неверный формат римского числа, в римском числе перед символы не могут два одинаковых символа меншего значения")
+			} else {
+				repeatCounter = 1
+			}
+		}
 		if current < next {
 			result -= current
 		} else {
@@ -61,8 +75,8 @@ func parseExpression(expression string) (int, int, string, bool) {
 		(!strings.ContainsAny(num1Str, "IVX") && strings.ContainsAny(num2Str, "IVX")) {
 		panic("Нельзя использовать одновременно арабские и римские цифры")
 	}
-	if num1 > 10 || num2 > 10 {
-		panic("Число не может быть больше 10")
+	if num1 > 10 || num1 == 0 || num2 == 0 || num2 > 10 {
+		panic("Число не может быть больше 10 или равно 0")
 	}
 
 	return num1, num2, matches[2], isRome
