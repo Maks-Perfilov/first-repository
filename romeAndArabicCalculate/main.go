@@ -19,12 +19,12 @@ func romeToInt(s string) int {
 		current, next := rtoi[string(s[i])], rtoi[string(s[i+1])]
 		if current == next {
 			repeatCounter++
-			if repeatCounter > 3 {
-				panic("Неверный формат римского числа, в римском числе символы не могу повторятся больше трёх раз")
+			if repeatCounter > 3 || current == rtoi["V"] {
+				panic("Недопустимая комбинация римских символов")
 			}
 		} else {
 			if repeatCounter > 1 && next > current {
-				panic("Неверный формат римского числа, в римском числе перед символы не могут два одинаковых символа меншего значения")
+				panic("Недопустимая комбинация римских символов")
 			} else {
 				repeatCounter = 1
 			}
