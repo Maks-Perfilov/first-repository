@@ -19,7 +19,7 @@ func romeToInt(s string) int {
 		current, next := rtoi[string(s[i])], rtoi[string(s[i+1])]
 		if current == next {
 			repeatCounter++
-			if repeatCounter > 3 || current == rtoi["V"] {
+			if repeatCounter > 3 || current == rtoi["V"] { // Для масштабирования надо проверки по типу current == rtoi["V"], только для L и D
 				panic("Недопустимая комбинация римских символов")
 			}
 		} else {
@@ -30,7 +30,11 @@ func romeToInt(s string) int {
 			}
 		}
 		if current < next {
-			result -= current
+			if current == rtoi["I"] && (next == rtoi["V"] || next == rtoi["X"]) { //Тоже изи масштабируется, и логика ясна
+				result -= current
+			} else {
+				panic("Недопустимая комбинация римских символов")
+			}
 		} else {
 			result += current
 		}
@@ -72,7 +76,7 @@ func parseExpression(expression string) (int, int, string, bool) {
 	isRome := strings.ContainsAny(num1Str, "IVX") || strings.ContainsAny(num2Str, "IVX")
 
 	if (strings.ContainsAny(num1Str, "IVX") && !strings.ContainsAny(num2Str, "IVX")) ||
-		(!strings.ContainsAny(num1Str, "IVX") && strings.ContainsAny(num2Str, "IVX")) {
+		(!strings.ContainsAny(num1Str, "IVX") && strings.ContainsAny(num2Str, "IVX")) { // можно было добавить сюда isRome num1Str true и isRome num1Str false, но не стал запариваться
 		panic("Нельзя использовать одновременно арабские и римские цифры")
 	}
 	if num1 > 10 || num1 == 0 || num2 == 0 || num2 > 10 {
